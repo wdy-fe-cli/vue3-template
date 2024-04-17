@@ -1,21 +1,34 @@
-import { createApp } from 'vue'
-import router from './router'
-import '@/router/filter.js'
-import { createPinia } from 'pinia'
-import './assets/styles/reset.scss'
-import 'normalize.css'
-import App from './App.vue'
-import { http } from './api/index'
+// import mitt from 'mitt'
 
-import ElementPlus from 'element-plus'
-import './assets/styles/element.scss'
+import { createApp } from 'vue'
+import App from './App.vue'
+// 页面样式
+import components from '@/components/index.js'
+import '@/styles/index.scss'
+// eslint-disable-next-line import/order
+import * as ElementPlusIconsVue from '@element-plus/icons-vue'
+// svg-icons
+import 'virtual:svg-icons-register'
+//  vue router
+import router from './router'
+// vue i18n
+import I18n from '@/languages/index'
+// pinia store
+import pinia from '@/store'
+// errorHandler
+import errorHandler from '@/utils/errorHandler'
+// custom directives
+import directives from '@/directives/index'
+
+// const Mit = mitt()
 
 const app = createApp(App)
-const pinia = createPinia()
 
-app.use(pinia)
-app.use(router)
-app.use(ElementPlus)
-app.mount('#app')
+app.config.errorHandler = errorHandler
+Object.entries(ElementPlusIconsVue).forEach(([key, component]) => {
+  app.component(key, component)
+})
 
-app.config.globalProperties.$http = http
+// app.config.globalProperties.emitter = Mit
+
+app.use(pinia).use(directives).use(I18n).use(router).use(components).mount('#app')

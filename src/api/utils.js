@@ -7,6 +7,7 @@ export const pushPending = (item) => {
 }
 // 请求完成后取消该请求，从列表删除
 export const removePending = (key) => {
+  // eslint-disable-next-line no-restricted-syntax
   for (const p in pending) {
     if (pending[p].key === key) {
       // 当前请求在列表中存在时
@@ -16,9 +17,7 @@ export const removePending = (key) => {
   }
 }
 // 请求前判断是否已存在该请求
-export const existInPending = (key) => {
-  return pending.some((e) => e.key === key)
-}
+export const existInPending = (key) => pending.some((e) => e.key === key)
 
 // 创建task
 export const createTask = (key, resolve) => {
@@ -35,7 +34,7 @@ export const createTask = (key, resolve) => {
 }
 // 处理task
 export const handleTask = (key, response) => {
-  for (let i = 0; task[key] && i < task[key].length; i++) {
+  for (let i = 0; task[key] && i < task[key].length; i += 1) {
     task[key][i](response)
   }
   task[key] = undefined

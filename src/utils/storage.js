@@ -1,9 +1,5 @@
-/***
+/**
  * title: storage.js
- * Author: Gaby
- * Email:
- * Time: 2022/6/8 15:53
- * last: 2022/7/4 15:53
  * Desc: 对本地存储进行封装, 命名规范、设置过期时间、安全加密
  */
 
@@ -16,10 +12,10 @@ const SECRET_IV = CryptoJS.enc.Utf8.parse('e3bbe7e3ba84431a')
 
 // 类型 window.localStorage,window.sessionStorage,
 const config = {
-  type: 'sessionStorage', // 本地存储类型 localStorage sessionStorage
-  prefix: 'xxx_0.0.1', // 名称前缀 建议：项目名 + 项目版本
+  type: 'localStorage', // 本地存储类型 localStorage sessionStorage
+  prefix: import.meta.env.VITE_ABBREVIATION, // 名称前缀 建议：项目名 + 项目版本
   expire: 0, // 过期时间 单位：秒
-  isEncrypt: false // 默认加密 为了调试方便, 开发过程中可以不加密
+  isEncrypt: true // 默认加密 为了调试方便, 开发过程中可以不加密
 }
 
 // 判断是否支持 Storage
@@ -43,57 +39,48 @@ export const setStorage = (key, value, expire = 0) => {
     value = null
   }
 
-  if (isNaN(expire) || expire < 0) throw new Error('Expire must be a number')
+  if (Number.isNaN(expire) || expire < 0) throw new Error('Expire must be a number')
 
   expire = (expire || config.expire) * 1000
   const data = {
-    value: value, // 存储值
+    value, // 存储值
     time: Date.now(), // 存值时间戳
-    expire: expire // 过期时间
+    expire // 过期时间
   }
   const encryptString = config.isEncrypt ? encrypt(JSON.stringify(data)) : JSON.stringify(data)
   window[config.type].setItem(autoAddPrefix(key), encryptString)
 }
 
 // 获取 getStorage
-export const getStorage = key => {
+export const getStorage = (key) => {
   let value = null
   key = autoAddPrefix(key)
   // key 不存在判断
-  if (
-    !window[config.type].getItem(key) ||
-    JSON.stringify(window[config.type].getItem(key)) === 'null'
-  ) {
+  if (!window[config.type].getItem(key) || JSON.stringify(window[config.type].getItem(key)) === 'null') {
     return null
   }
 
   // 优化 持续使用中续期
-  const storage = config.isEncrypt
-    ? JSON.parse(decrypt(window[config.type].getItem(key)))
-    : JSON.parse(window[config.type].getItem(key))
+  const storage = config.isEncrypt ? JSON.parse(decrypt(window[config.type].getItem(key))) : JSON.parse(window[config.type].getItem(key))
   const nowTime = Date.now()
   // 过期删除
   if (storage.expire && storage.expire < nowTime - storage.time) {
     removeStorage(key)
     return null
-  } else {
-    // // 未过期期间被调用 则自动续期 进行保活
-    // setStorage(autoRemovePrefix(key), storage.value);
-    if (isJson(storage.value)) {
-      value = JSON.parse(storage.value)
-    } else {
-      value = storage.value
-    }
-    return value
   }
+  // // 未过期期间被调用 则自动续期 进行保活
+  if (isJson(storage.value)) {
+    value = JSON.parse(storage.value)
+  } else {
+    value = storage.value
+  }
+  return value
 }
 
 // 是否存在 hasStorage
-export const hasStorage = key => {
+export const hasStorage = (key) => {
   key = autoAddPrefix(key)
-  const arr = getStorageAll().filter(item => {
-    return item.key === key
-  })
+  const arr = getStorageAll().filter((item) => item.key === key)
   return !!arr.length
 }
 
@@ -101,34 +88,28 @@ export const hasStorage = key => {
 export const getStorageKeys = () => {
   const items = getStorageAll()
   const keys = []
-  for (let index = 0; index < items.length; index++) {
+  for (let index = 0; index < items.length; index += 1) {
     keys.push(items[index].key)
   }
   return keys
 }
 
 // 根据索引获取key
-export const getStorageForIndex = index => {
-  return window[config.type].key(index)
-}
+export const getStorageForIndex = (index) => window[config.type].key(index)
 
 // 获取localStorage长度
-export const getStorageLength = () => {
-  return window[config.type].length
-}
+export const getStorageLength = () => window[config.type].length
 
 // 获取全部 getAllStorage
 export const getStorageAll = () => {
   const len = getStorageLength() // 获取长度
   const arr = [] // 定义数据集
-  for (let i = 0; i < len; i++) {
+  for (let i = 0; i < len; i += 1) {
     const key = window[config.type].key(i)
     // 获取key 索引从0开始
     const getKey = autoRemovePrefix(key)
     // 获取key对应的值
-    const storage = config.isEncrypt
-      ? JSON.parse(decrypt(window[config.type].getItem(key)))
-      : JSON.parse(window[config.type].getItem(key))
+    const storage = config.isEncrypt ? JSON.parse(decrypt(window[config.type].getItem(key))) : JSON.parse(window[config.type].getItem(key))
 
     const nowTime = Date.now()
     if (storage.expire && nowTime - storage.time > storage.expire) {
@@ -147,7 +128,7 @@ export const getStorageAll = () => {
 }
 
 // 删除 removeStorage
-export const removeStorage = key => {
+export const removeStorage = (key) => {
   window[config.type].removeItem(autoAddPrefix(key))
 }
 
@@ -157,7 +138,7 @@ export const clearStorage = () => {
 }
 
 // 判断是否可用 JSON.parse
-export const isJson = value => {
+export const isJson = (value) => {
   if (Object.prototype.toString.call(value) === '[object String]') {
     try {
       const obj = JSON.parse(value)
@@ -172,13 +153,13 @@ export const isJson = value => {
 }
 
 // 名称前自动添加前缀
-const autoAddPrefix = key => {
-  const prefix = config.prefix ? config.prefix + '_' : ''
+const autoAddPrefix = (key) => {
+  const prefix = config.prefix ? `${config.prefix}_` : ''
   return prefix + key
 }
 
 // 移除已添加的前缀
-const autoRemovePrefix = key => {
+const autoRemovePrefix = (key) => {
   const len = config.prefix ? config.prefix.length + 1 : ''
   return key.substr(len)
 }
@@ -188,7 +169,7 @@ const autoRemovePrefix = key => {
  * @param data
  * @returns {string}
  */
-const encrypt = data => {
+const encrypt = (data) => {
   if (typeof data === 'object') {
     try {
       data = JSON.stringify(data)
@@ -210,48 +191,14 @@ const encrypt = data => {
  * @param data
  * @returns {string}
  */
-const decrypt = data => {
+const decrypt = (data) => {
   const encryptedHexStr = CryptoJS.enc.Hex.parse(data)
   const str = CryptoJS.enc.Base64.stringify(encryptedHexStr)
-  const decrypt = CryptoJS.AES.decrypt(str, SECRET_KEY, {
+  const decrypt1 = CryptoJS.AES.decrypt(str, SECRET_KEY, {
     iv: SECRET_IV,
     mode: CryptoJS.mode.CBC,
     padding: CryptoJS.pad.Pkcs7
   })
-  const decryptedStr = decrypt.toString(CryptoJS.enc.Utf8)
+  const decryptedStr = decrypt1.toString(CryptoJS.enc.Utf8)
   return decryptedStr.toString()
-}
-
-export default {
-  install (Vue) {
-    // 挂载全局
-    if (!Vue.$storage) {
-      Vue.$storage = {
-        set: setStorage,
-        get: getStorage,
-        getAll: getStorageAll,
-        getLen: getStorageLength,
-        isSub: isSupStorage,
-        isJson: isJson,
-        has: hasStorage,
-        del: removeStorage,
-        clear: clearStorage
-      }
-    } else {
-      Vue.$storage.set = setStorage
-      Vue.$storage.get = getStorage
-      Vue.$storage.getAll = getStorageAll
-      Vue.$storage.getLen = getStorageLength
-      Vue.$storage.isSub = isSupStorage
-      Vue.$storage.isJson = isJson
-      Vue.$storage.has = hasStorage
-      Vue.$storage.del = removeStorage
-      Vue.$storage.clear = clearStorage
-    }
-    Vue.mixin({
-      created: function () {
-        this.$storage = Vue.$storage
-      }
-    })
-  }
 }

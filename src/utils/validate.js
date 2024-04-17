@@ -1,4 +1,4 @@
-export function isEmpty (value) {
+export function isEmpty(value) {
   if (value == null || value === undefined || value === 'undefined') {
     // 等同于 value === undefined || value === null
     return true
@@ -16,6 +16,10 @@ export function isEmpty (value) {
   }
 }
 
+export function isExternal(path) {
+  return /^(https?:|mailto:|tel:)/.test(path)
+}
+
 export const checkInput = (str, type) => {
   // 校验
   switch (type) {
@@ -26,26 +30,19 @@ export const checkInput = (str, type) => {
     case 'card': // 身份证
       return /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/.test(str)
     case 'pwd': // 密码以字母开头，只能包含字母、数字和下划线
-      return /^[a-zA-Z]w{5,17}$/.test(str)
+      return /^(?![0-9]+$)(?![a-z]+$)(?![A-Z]+$)(?!([^(0-9a-zA-Z)])+$)^.{8,16}$/.test(str)
     case 'postal': // 邮政编码
       return /[1-9]d{5}(?!d)/.test(str)
     case 'QQ': // QQ号
       return /^[1-9][0-9]{4,9}$/.test(str)
     case 'email': // 邮箱
-      return /^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$/.test(
-        str
-      )
+      return /^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$/.test(str)
     case 'money': // 金钱(小数点两位)
       return /^d*(?:.d{0,2})?$/.test(str)
     case 'IP': // IP
-      return /((?:(?:25[0-5]|2[0-4]d|[01]?d?d).){3}(?:25[0-5]|2[0-4]d|[01]?d?d))/.test(
-        str
-      )
+      return /((?:(?:25[0-5]|2[0-4]d|[01]?d?d).){3}(?:25[0-5]|2[0-4]d|[01]?d?d))/.test(str)
     case 'date': // 日期时间
-      return (
-        /^(d{4})-(d{2})-(d{2}) (d{2})(?::d{2}|:(d{2}):(d{2}))$/.test(str) ||
-        /^(d{4})-(d{2})-(d{2})$/.test(str)
-      )
+      return /^(d{4})-(d{2})-(d{2}) (d{2})(?::d{2}|:(d{2}):(d{2}))$/.test(str) || /^(d{4})-(d{2})-(d{2})$/.test(str)
     case 'number': // 数字
       return /^[0-9]$/.test(str)
     case 'english': // 英文
@@ -60,6 +57,8 @@ export const checkInput = (str, type) => {
       return /<("[^"]*"|'[^']*'|[^'">])*>/.test(str)
     case 'input': // 常用输入框
       return /^[\u4e00-\u9fa5A-Za-z0-9]{1,20}/.test(str)
+    case 'notChinese':
+      return /^[A-Za-z0-9]+$/.test(str)
     default:
       return true
   }

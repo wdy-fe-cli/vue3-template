@@ -1,25 +1,28 @@
-import Request from './axios'
+import request from './axios'
+import { getStorage } from '@/utils/storage.js'
 
-const apiUrls = new Map([
-  ['apiSendSms', ['member/sms/send', 'post']],
-  ['apiSendSms', ['member/sms/send', 'get']]
-])
+let modulesApis = []
+const files = import.meta.globEager('./modules/*.js')
+// eslint-disable-next-line no-restricted-syntax
+for (const key in files) {
+  if (Object.hasOwnProperty.call(files, key)) {
+    if (files[key].default) {
+      modulesApis.push(...files[key].default)
+    }
+  }
+}
 
-const HeadersMap = new Map([
-  ['get', { 'Content-Type': 'application/json' }],
-  ['post', { 'Content-Type': 'application/x-www-form-urlencoded' }],
-  ['file', { 'Content-Type': 'multipart/form-data' }]
-])
-const commonParams = {}
+export const apiUrls = new Map([...modulesApis])
 
-export function http(apiName, params, preventRepeat = true) {
-  const [url, method, header] = apiUrls.get(apiName)
-  return Request.request(
-    method,
-    url,
-    { ...commonParams, ...params },
-    { ...header, ...HeadersMap.get(method) },
-    preventRepeat,
-    method === 'file'
-  )
+// 常规请求头
+export function http(apiName, params) {
+  const [url, method, obj] = apiUrls.get(apiName)
+  if (!obj || !obj.noNeedOrgId) {
+    params = {
+      orgId: getStorage('orgId'),
+      ...params
+    }
+  }
+  // eslint-disable-next-line import/no-named-as-default-member
+  return request[method](url, params, { ...obj })
 }

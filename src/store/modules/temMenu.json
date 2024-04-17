@@ -1,0 +1,233 @@
+[
+  {
+    "appCode": "2",
+    "children": [
+      {
+        "path": "/user",
+        "name": "user",
+        "component": "/user/index",
+        "id": "12295844579775488",
+        "moduleCode": "2",
+        "meta": {
+          "icon": "OfficeBuilding",
+          "title": "用户管理",
+          "isLink": "",
+          "isHide": false,
+          "isFull": false,
+          "isAffix": false,
+          "isKeepAlive": true
+        },
+        "appCode": "2",
+        "children": [],
+        "code": "00010003",
+        "deep": 2,
+        "icon": "",
+        "pageUrl": "User",
+        "parentCode": "0001",
+        "sequence": 4
+      }
+    ],
+    "path": "/platform",
+    "name": "platform",
+    "component": "/platform/index",
+    "id": "12295437975557120",
+    "moduleCode": "2",
+    "meta": {
+      "icon": "OfficeBuilding",
+      "title": "平台管理",
+      "isLink": "",
+      "isHide": false,
+      "isFull": false,
+      "isAffix": false,
+      "isKeepAlive": true
+    }
+  },
+  {
+    "appCode": "2",
+    "children": [
+      {
+        "appCode": "2",
+        "path": "/module",
+        "name": "module",
+        "component": "/module/index",
+        "moduleCode": "2",
+        "meta": {
+          "icon": "OfficeBuilding",
+          "title": "模块管理",
+          "isLink": "",
+          "isHide": false,
+          "isFull": false,
+          "isAffix": false,
+          "isKeepAlive": true
+        },
+        "id": "12295437975557120",
+        "code": "00020001",
+        "deep": 2,
+        "icon": "",
+        "parentCode": "0002",
+        "sequence": 6
+      },
+      {
+        "path": "/app",
+        "name": "app",
+        "component": "/app/index",
+        "moduleCode": "2",
+        "meta": {
+          "icon": "OfficeBuilding",
+          "title": "应用管理",
+          "activeMenu": "",
+          "isLink": "",
+          "isHide": false,
+          "isFull": false,
+          "isAffix": false,
+          "isKeepAlive": true
+        },
+        "code": "00020002",
+        "deep": 2,
+        "icon": "",
+        "id": "12296061193556992",
+        "parentCode": "0002",
+        "sequence": 8
+      },
+      {
+        "path": "/app-menu",
+        "name": "appMenu",
+        "component": "/app/menu/index",
+        "moduleCode": "2",
+        "meta": {
+          "title": "菜单管理",
+          "activeMenu": "/app",
+          "isHide": true
+        },
+        "code": "00020002",
+        "deep": 2,
+        "icon": "",
+        "id": "12296061193556992",
+        "parentCode": "0002",
+        "sequence": 8
+      },
+      {
+        "path": "/app-limit",
+        "name": "appLimit",
+        "component": "/app/limit/index",
+        "moduleCode": "2",
+        "meta": {
+          "title": "权限管理",
+          "isHide": true,
+          "activeMenu": "/app"
+        },
+        "code": "00020002",
+        "deep": 2,
+        "icon": "",
+        "id": "12296061193556992",
+        "parentCode": "0002",
+        "sequence": 8
+      }
+    ],
+    "path": "/module",
+    "name": "module",
+    "id": "12295437975557120",
+    "moduleCode": "2",
+    "meta": {
+      "icon": "OfficeBuilding",
+      "title": "模块应用管理",
+      "isLink": "",
+      "isHide": false,
+      "isFull": false,
+      "isAffix": false,
+      "isKeepAlive": true
+    },
+    "code": "0002",
+    "deep": 1,
+    "icon": "icon__yingyongmokuaiguanli",
+    "parentCode": "",
+    "sequence": 10
+  },
+  {
+    "children": [
+      {
+        "path": "/top-org/index",
+        "name": "topOrg",
+        "component": "/top-org/index",
+        "moduleCode": "2",
+        "meta": {
+          "icon": "OfficeBuilding",
+          "title": "顶级组织管理",
+          "isLink": "",
+          "isHide": false,
+          "isFull": false,
+          "isAffix": false,
+          "isKeepAlive": false
+        },
+        "appCode": "2",
+        "children": [],
+        "code": "00030001",
+        "deep": 2,
+        "icon": "",
+        "id": "12297217371280384",
+        "parentCode": "0003",
+        "sequence": 11
+      },
+      {
+        "path": "/top-org-role/index",
+        "name": "topOrgRole",
+        "component": "/top-org-role/index",
+        "moduleCode": "2",
+        "meta": {
+          "icon": "OfficeBuilding",
+          "title": "组织角色管理",
+          "isLink": "",
+          "isHide": false,
+          "isFull": false,
+          "isAffix": false,
+          "isKeepAlive": false
+        },
+        "appCode": "2",
+        "children": [],
+        "code": "00030002",
+        "deep": 2,
+        "icon": "",
+        "id": "12297239525594112",
+        "parentCode": "0003",
+        "sequence": 12
+      },
+      {
+        "path": "/top-org/admin",
+        "name": "orgAdmin",
+        "component": "/top-org/admin/index",
+        "moduleCode": "2",
+        "meta": {
+          "title": "超管管理",
+          "isHide": true,
+          "activeMenu": "/top-org/index"
+        },
+        "appCode": "2",
+        "children": [],
+        "code": "00030002",
+        "deep": 2,
+        "icon": "",
+        "id": "12297239525594112",
+        "parentCode": "0003",
+        "sequence": 12
+      }
+    ],
+    "path": "/top-org",
+    "appCode": "2",
+    "name": "orgFrame",
+    "moduleCode": "2",
+    "meta": {
+      "icon": "OfficeBuilding",
+      "title": "组织架构管理",
+      "isLink": "",
+      "isHide": false,
+      "isFull": false,
+      "isAffix": false,
+      "isKeepAlive": true
+    },
+    "code": "0003",
+    "deep": 1,
+    "id": "12297164055385088",
+    "parentCode": "",
+    "sequence": 13
+  }
+]

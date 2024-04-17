@@ -1,0 +1,55 @@
+.color-primary {
+  color: var(--el-color-primary);
+}
+.bg-primary {
+  background-color: var(--el-color-primary);
+}
+.tr {
+  text-align: right;
+}
+.tl {
+  text-align: left;
+}
+.tr {
+  text-align: right;
+}
+.tl {
+  text-align: left;
+}
+
+.tc {
+  text-align: center;
+}
+
+.tc {
+  text-align: center;
+}
+
+.info-title {
+  font-size: 15px;
+  font-weight: 500;
+  position: relative;
+}
+.info-title:before {
+  content: '';
+  position: absolute;
+  width: 4px;
+  height: 15px;
+  background: var(--el-color-primary);
+  top: 3px;
+  left: -12px;
+}
+
+.scroll-bar-overlay {
+  overflow-y: overlay !important;
+}
+.dom-scrollbar-show::-webkit-scrollbar {
+  width: 8px !important;
+}
+.dom-scrollbar-hide::-webkit-scrollbar {
+  width: 0 !important;
+}
+
+.amap-logo {
+  display: none !important;
+}
